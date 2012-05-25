@@ -1,6 +1,7 @@
 package zombiesj;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 /*
  * 
@@ -14,26 +15,39 @@ import java.util.Collection;
  */
 
 enum Estado {
-  PERSONA{
+  PERSONA {
     public void escucharGrito(Personaje personaje) {
       throw new RuntimeException("Las personas no saben escuchar gritos!");
     }
 
     public void mover(Posicion posicion, int cuanto, Direccion direccion) {
-        posicion.mover(cuanto, direccion);
+      posicion.mover(cuanto, direccion);
     }
-  }, ZOMBIE {
-    public void escucharGrito(Personaje personaje){
+
+    public void morder(Personaje otro) {
+      throw new RuntimeException("Las personas no saben morder!");
+    }
+
+  },
+  ZOMBIE {
+    public void escucharGrito(Personaje personaje) {
       personaje.disminuirEnergia(50);
     }
+
     public void mover(Posicion posicion, int cuanto, Direccion direccion) {
       posicion.mover(cuanto / 2, direccion);
+    }
+
+    public void morder(Personaje otro) {
+      otro.volverZombie();
     }
   };
 
   public abstract void escucharGrito(Personaje personaje);
 
   public abstract void mover(Posicion posicion, int cuanto, Direccion direccion);
+
+  public abstract void morder(Personaje otro);
 }
 
 enum Direccion {
@@ -54,17 +68,35 @@ enum Direccion {
 class Posicion {
   private int x;
 
+  public Posicion(int x) {
+    this.x = x;
+  }
+
   public void mover(int cuanto, Direccion direccion) {
     x = direccion.mover(x, cuanto);
   }
+
+  public int getX() {
+    return x;
+  }
 }
 
-public class Personaje {
+interface Gritable {
 
-  private Posicion posicion;
-  private int energia = 200;
-  private Collection<Personaje> perseguidores;
-  private Estado estado;
+  void escucharGrito();
+  
+}
+
+public class Personaje implements Gritable {
+
+  private Posicion posicion = new Posicion(0);
+  private int energia;
+  private Collection<Gritable> perseguidores = new LinkedList<Gritable>();
+  private Estado estado = Estado.PERSONA;
+
+  public Personaje(int energia) {
+    this.energia = energia;
+  }
 
   public int getEnergiaParaCaminar() {
     return 5;
@@ -114,36 +146,47 @@ public class Personaje {
       throw new RuntimeException("No hay suficiente energia para gritar");
     }
     System.out.println("AHHHHHH");
-    
-    for(Personaje perseguidor : perseguidores) 
+
+    for (Gritable perseguidor : perseguidores)
       perseguidor.escucharGrito();
-    
+
     disminuirEnergia(getEnergiaParaGritar());
   }
-  
-  public void perseguir(Personaje perseguidor) {
+
+  public void perseguirPor(Gritable perseguidor) {
     perseguidores.add(perseguidor);
   }
-  
+
   public void escucharGrito() {
     estado.escucharGrito(this);
   }
-  
+
   public void volverZombie() {
     estado = Estado.ZOMBIE;
   }
 
+  public void morder(Personaje otro) {
+    estado.morder(otro);
+  }
+
   protected boolean tieneSuficienteEnergia(int energiaRequerida) {
-    return energia >= energiaRequerida;
+    return getEnergia() >= energiaRequerida;
   }
 
   protected void disminuirEnergia(int energiaRequerida) {
     energia -= energiaRequerida;
   }
-  
+
   protected void mover(Posicion posicion, int cuanto, Direccion direccion) {
     estado.mover(posicion, cuanto, direccion);
   }
-  
-  
+
+  public int getPosicionX() {
+    return posicion.getX();
+  }
+
+  public int getEnergia() {
+    return energia;
+  }
+
 }
