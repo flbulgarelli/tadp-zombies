@@ -6,30 +6,31 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ZombiesTestDriver {
-
-  private Personaje zombie1;
-  private Personaje personaSana;
-  private Personaje personaDebil;
+  
+  class GritableMock {
+    boolean gritado = false;
+    public void escucharGrito() {
+      gritado = true;
+    }
+  }
+  
+  private Persona zombie1;
+  private Persona personaSana;
+  private Persona personaDebil;
 
   @Before
   public void setup() {
-    zombie1 = new Personaje(150);
+    zombie1 = new Persona(150);
     
-    personaSana = new Personaje(60);
-    personaDebil = new Personaje(4);
+    personaSana = new Persona(60);
+    personaDebil = new Persona(4);
     
-    zombie1.volverZombie();
+    zombie1.volverZombie()
   }
   
   
   @Test
   public void cuandoUnPersonajeGritaSusPerseguidoresLoEscuchan() {
-    class GritableMock implements Gritable {
-      boolean gritado = false;
-      public void escucharGrito() {
-        gritado = true;
-      }
-    }
     GritableMock perseguidor1 = new GritableMock();
     GritableMock perseguidor2 = new GritableMock();
     personaSana.perseguirPor(perseguidor1);
@@ -60,14 +61,14 @@ public class ZombiesTestDriver {
     personaSana.caminar(Direccion.DERECHA);
     personaSana.caminar(Direccion.IZQUIERDA);
 
-    assertEquals(10, personaSana.getPosicionX());
+    assertEquals(10, personaSana.posicionX);
   }
   
   @Test
   public void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
     zombie1.caminar(Direccion.DERECHA);
     
-    assertEquals(5, zombie1.getPosicionX());
+    assertEquals(5, zombie1.posicionX);
   }
   
   @Test(expected = RuntimeException.class)
@@ -94,7 +95,7 @@ public class ZombiesTestDriver {
   public void gritarleAUnZombieReduceSuEnergia() throws Exception {
     zombie1.escucharGrito();
     
-    assertEquals(100, zombie1.getEnergia());
+    assertEquals(100, zombie1.energia);
   }
   
   @Test(expected=RuntimeException.class)
@@ -103,7 +104,7 @@ public class ZombiesTestDriver {
   }
 
 
-  public void assertPuedeMorder(Personaje mordedor, Personaje mordido) {
+  public void assertPuedeMorder(Persona mordedor, Persona mordido) {
     try {
       mordedor.morder(mordedor);
     } catch (Exception e) {
