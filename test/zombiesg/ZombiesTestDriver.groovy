@@ -1,112 +1,114 @@
-package zombiesg;
+package zombiesg
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.*
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Before
+import org.junit.Test
 
-public class ZombiesTestDriver {
+class ZombiesTestDriver {
   
   class GritableMock {
-    boolean gritado = false;
-    public void escucharGrito() {
-      gritado = true;
+    boolean gritado = false
+    void escucharGrito() {
+      gritado = true
     }
   }
   
-  private Persona zombie1;
-  private Persona personaSana;
-  private Persona personaDebil;
+  Persona zombie1
+  Persona personaSana
+  Persona personaDebil
 
   @Before
-  public void setup() {
-    zombie1 = new Persona(energia: 150);
-    personaSana = new Persona(energia: 60);
-    personaDebil = new Persona(energia: 4);
+  void setup() {
+    zombie1 = new Persona(energia: 150)
+    personaSana = new Persona(energia: 60)
+    personaDebil = new Persona(energia: 4)
     
     zombie1.volverZombie()
   }
   
   
   @Test
-  public void cuandoUnPersonajeGritaSusPerseguidoresLoEscuchan() {
-    GritableMock perseguidor1 = new GritableMock();
-    GritableMock perseguidor2 = new GritableMock();
-    personaSana.perseguirPor(perseguidor1);
-    personaSana.perseguirPor(perseguidor2);
+  void cuandoUnPersonajeGritaSusPerseguidoresLoEscuchan() {
+    GritableMock perseguidor1 = new GritableMock()
+    GritableMock perseguidor2 = new GritableMock()
+    personaSana.with { 
+      perseguirPor(perseguidor1)
+      perseguirPor(perseguidor2)
+    }
+    personaSana.gritar()
     
-    
-    personaSana.gritar();
-    
-    assertTrue(perseguidor1.gritado);
-    assertTrue(perseguidor2.gritado);
+    assertTrue(perseguidor1.gritado)
+    assertTrue(perseguidor2.gritado)
   }
 
 
   @Test
-  public void cuandoUnZombieMuerdeVuelveASuVictimaZombie() {
-    zombie1.morder(personaSana);
-    assertPuedeMorder(personaSana, personaDebil);
+  void cuandoUnZombieMuerdeVuelveASuVictimaZombie() {
+    zombie1.morder(personaSana)
+    assertPuedeMorder(personaSana, personaDebil)
   }
 
-  @Test(expected = RuntimeException.class)
-  public void lasPersonasNoPuedenMorder() {
-    personaSana.morder(personaDebil);
+  @Test(expected = RuntimeException)
+  void lasPersonasNoPuedenMorder() {
+    personaSana.morder(personaDebil)
   }
   
   @Test
-  public void losPersonajesSePuedenMoverEnAmbasDirecciones() {
-    personaSana.caminar(Direccion.DERECHA);
-    personaSana.caminar(Direccion.DERECHA);
-    personaSana.caminar(Direccion.IZQUIERDA);
-
-    assertEquals(10, personaSana.posicionX);
+  void losPersonajesSePuedenMoverEnAmbasDirecciones() {
+    //Marcar esto
+    personaSana.with {
+      caminar(Direccion.DERECHA)
+      caminar(Direccion.DERECHA)
+      caminar(Direccion.IZQUIERDA)
+    }
+    assertEquals(10, personaSana.posicionX)
   }
   
   @Test
-  public void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
-    zombie1.caminar(Direccion.DERECHA);
-    assertEquals(5, zombie1.posicionX);
+  void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
+    zombie1.caminar(Direccion.DERECHA)
+    assertEquals(5, zombie1.posicionX)
   }
   
-  @Test(expected = RuntimeException.class)
-  public void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
-    personaDebil.correr(Direccion.DERECHA);
+  @Test(expected = RuntimeException)
+  void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
+    personaDebil.correr(Direccion.DERECHA)
   }
   
-  @Test(expected = RuntimeException.class)
-  public void lasPersonasNoPuedeGritarSiNoTienenEnergiaSuficiente() {
-    personaDebil.gritar();
+  @Test(expected = RuntimeException)
+  void lasPersonasNoPuedeGritarSiNoTienenEnergiaSuficiente() {
+    personaDebil.gritar()
   }
   
-  @Test(expected = RuntimeException.class)
-  public void lasPersonasNoPuedenTrotarSiNoTienenEnergiaSuficiente() {
-    personaDebil.trotar(Direccion.DERECHA);
+  @Test(expected = RuntimeException)
+  void lasPersonasNoPuedenTrotarSiNoTienenEnergiaSuficiente() {
+    personaDebil.trotar(Direccion.DERECHA)
   }
   
-  @Test(expected = RuntimeException.class)
-  public void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
-    personaDebil.caminar(Direccion.DERECHA);
+  @Test(expected = RuntimeException)
+  void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
+    personaDebil.caminarDerecha(Direccion.DERECHA)
   }
 
   @Test
-  public void gritarleAUnZombieReduceSuEnergia() throws Exception {
-    zombie1.escucharGrito();
+  void gritarleAUnZombieReduceSuEnergia() {
+    zombie1.escucharGrito()
     
-    assertEquals(100, zombie1.energia);
+    assertEquals(100, zombie1.energia)
   }
   
-  @Test(expected=RuntimeException.class)
-  public void lasPersonasSonSordas() throws Exception {
-    personaSana.escucharGrito();
+  @Test(expected=RuntimeException)
+  void lasPersonasSonSordas() {
+    personaSana.escucharGrito()
   }
 
 
-  public void assertPuedeMorder(Persona mordedor, Persona mordido) {
+  void assertPuedeMorder(Persona mordedor, Persona mordido) {
     try {
-      mordedor.morder(mordedor);
+      mordedor.morder(mordedor)
     } catch (Exception e) {
-      fail();
+      fail()
     }
   }
 }

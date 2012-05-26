@@ -3,16 +3,18 @@ package zombiesg
 import java.util.Collection
 import java.util.LinkedList
 
+//TODO me faltan reqs para un eigen method y un mixin estatico, y/o multimetodos. 
+//instance eval podremos verlo en la otra clase 
 class Zombie {
-  void escucharGrito() {
+  def escucharGrito() {
     _disminuirEnergia(50)
   }
 
-  void _mover(cuanto, direccion) {
+  def _mover(cuanto, direccion) {
     posicion.mover(cuanto / 2, direccion)
   }
 
-  void morder(otro) {
+  def morder(otro) {
     otro.volverZombie()
   }
 }
@@ -31,8 +33,8 @@ enum Direccion {
 }
 
 class Posicion {
-  int x
-  void mover(cuanto, direccion) {
+  def x
+  def mover(cuanto, direccion) {
     x = direccion.mover(x, cuanto)
   }
 }
@@ -40,16 +42,16 @@ class Posicion {
 class Persona {
 
   Posicion posicion = new Posicion(x: 0)
-  int energia
+  def energia
   def perseguidores = []
 
-  int getEnergiaParaCaminar() { 5 }
+  def getEnergiaParaCaminar() { 5 }
 
-  int getEnergiaParaCorrer() { 60 }
+  def getEnergiaParaCorrer() { 60 }
 
-  int getEnergiaParaGritar() { 60 }
+  def getEnergiaParaGritar() { 60 }
 
-  int getEnergiaParaTrotar() { 15 }
+  def getEnergiaParaTrotar() { 15 }
   
   def methodMissing(String name, args){
     if(name in ['correr', 'gritar', 'caminar', 'trotar']) 
@@ -59,7 +61,7 @@ class Persona {
   }
   
   def _realizarAccion(name, args) {
-    int energiaRequerida = this."energiaPara${name.capitalize()}"
+    def energiaRequerida = this."energiaPara${name.capitalize()}"
     if (!_tieneSuficienteEnergia(energiaRequerida)) {
       throw new RuntimeException("No hay suficiente energia para ${name}")
     }
@@ -67,19 +69,19 @@ class Persona {
     _disminuirEnergia(energiaRequerida)
   }
 
-  void _caminar(Direccion direccion) {
+  def _caminar(direccion) {
     _mover(10, direccion)
   }
 
-  void _trotar(Direccion direccion) {
+  def _trotar(direccion) {
     _mover(20, direccion)
   }
 
-  void _correr(Direccion direccion) {
+  def _correr(direccion) {
     _mover(40, direccion)
   }
 
-  void _gritar() {
+  def _gritar() {
     println "AHHHHHH"
     perseguidores.each { it.escucharGrito() }
   }
@@ -96,7 +98,7 @@ class Persona {
     posicion.mover(cuanto, direccion)
   }
   
-  int getPosicionX() {
+  def getPosicionX() {
     posicion.x
   }
   
