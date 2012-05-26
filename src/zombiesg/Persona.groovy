@@ -5,10 +5,10 @@ import java.util.LinkedList
 
 class Zombie {
   void escucharGrito() {
-    disminuirEnergia(50)
+    _disminuirEnergia(50)
   }
 
-  void mover(cuanto, direccion) {
+  void _mover(cuanto, direccion) {
     posicion.mover(cuanto / 2, direccion)
   }
 
@@ -30,7 +30,6 @@ enum Direccion {
   }
 }
 
-// contra mis principios, es mutable
 class Posicion {
   int x
   void mover(cuanto, direccion) {
@@ -54,30 +53,30 @@ class Persona {
   
   def methodMissing(String name, args){
     if(name in ['correr', 'gritar', 'caminar', 'trotar']) 
-      realizarAccion(name, args);
+      _realizarAccion(name, args);
     else 
-      throw new MissingMethodException(name, this.class, arguments);
+      throw new MissingMethodException(name, this.class, args);
   }
   
-  def realizarAccion(name, args) {
+  def _realizarAccion(name, args) {
     int energiaRequerida = this."energiaPara${name.capitalize()}"
-    if (!tieneSuficienteEnergia(energiaRequerida)) {
+    if (!_tieneSuficienteEnergia(energiaRequerida)) {
       throw new RuntimeException("No hay suficiente energia para ${name}")
     }
     invokeMethod("_${name}", args)
-    disminuirEnergia(energiaRequerida)
+    _disminuirEnergia(energiaRequerida)
   }
 
   void _caminar(Direccion direccion) {
-    mover(10, direccion)
+    _mover(10, direccion)
   }
 
   void _trotar(Direccion direccion) {
-    mover(20, direccion)
+    _mover(20, direccion)
   }
 
   void _correr(Direccion direccion) {
-    mover(40, direccion)
+    _mover(40, direccion)
   }
 
   void _gritar() {
@@ -85,27 +84,27 @@ class Persona {
     perseguidores.each { it.escucharGrito() }
   }
 
+  def _tieneSuficienteEnergia(energiaRequerida) {
+    energia >= energiaRequerida
+  }
+
+  def _disminuirEnergia(energiaRequerida) {
+    energia -= energiaRequerida
+  }
+  
+  def _mover(cuanto, direccion) {
+    posicion.mover(cuanto, direccion)
+  }
+  
+  int getPosicionX() {
+    posicion.x
+  }
+  
   def perseguirPor(perseguidor) {
     perseguidores << perseguidor
   }
   
   def volverZombie() {
     this.metaClass { mixin(Zombie) }
-  }
-  
-  protected tieneSuficienteEnergia(energiaRequerida) {
-    energia >= energiaRequerida
-  }
-
-  protected disminuirEnergia(energiaRequerida) {
-    energia -= energiaRequerida
-  }
-  
-  protected mover(cuanto, direccion) {
-    posicion.mover(cuanto, direccion)
-  }
-  
-  int getPosicionX() {
-    posicion.x
   }
 }
