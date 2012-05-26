@@ -58,22 +58,22 @@ class ZombiesTestDriver {
   void losPersonajesSePuedenMoverEnAmbasDirecciones() {
     //Marcar esto
     personaSana.with {
-      caminar(Direccion.DERECHA)
-      caminar(Direccion.DERECHA)
-      caminar(Direccion.IZQUIERDA)
+      caminar('derecha')
+      caminar('derecha')
+      caminar('izquierda')
     }
-    assertEquals(10, personaSana.posicionX)
+    assert 10 == personaSana.posicionX
   }
   
   @Test
   void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
-    zombie1.caminar(Direccion.DERECHA)
-    assertEquals(5, zombie1.posicionX)
+    zombie1.caminar('derecha')
+    assert 5 == zombie1.posicionX
   }
   
   @Test(expected = RuntimeException)
   void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
-    personaDebil.correr(Direccion.DERECHA)
+    personaDebil.correr('derecha')
   }
   
   @Test(expected = RuntimeException)
@@ -83,19 +83,19 @@ class ZombiesTestDriver {
   
   @Test(expected = RuntimeException)
   void lasPersonasNoPuedenTrotarSiNoTienenEnergiaSuficiente() {
-    personaDebil.trotar(Direccion.DERECHA)
+    personaDebil.trotar('derecha')
   }
   
   @Test(expected = RuntimeException)
   void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
-    personaDebil.caminarDerecha(Direccion.DERECHA)
+    personaDebil.caminar('derecha')
   }
 
   @Test
   void gritarleAUnZombieReduceSuEnergia() {
     zombie1.escucharGrito()
     
-    assertEquals(100, zombie1.energia)
+    assert 100 == zombie1.energia
   }
   
   @Test(expected=RuntimeException)

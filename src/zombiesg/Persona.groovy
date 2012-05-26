@@ -4,14 +4,14 @@ import java.util.Collection
 import java.util.LinkedList
 
 //TODO me faltan reqs para un eigen method y un mixin estatico, y/o multimetodos. 
-//instance eval podremos verlo en la otra clase 
+//instance eval podremos verlo en la otra clase
 class Zombie {
   def escucharGrito() {
     _disminuirEnergia(50)
   }
 
-  def _mover(cuanto, direccion) {
-    posicion.mover(cuanto / 2, direccion)
+  def _mover(cuanto) {
+    posicion.mover(cuanto / 2)
   }
 
   def morder(otro) {
@@ -19,23 +19,10 @@ class Zombie {
   }
 }
 
-enum Direccion {
-  IZQUIERDA {
-    int mover(x, cuanto) {
-      x - cuanto
-    }
-  },
-  DERECHA {
-    int mover(x, cuanto) {
-      x + cuanto
-    }
-  }
-}
-
 class Posicion {
   def x
-  def mover(cuanto, direccion) {
-    x = direccion.mover(x, cuanto)
+  def mover(cuanto) {
+    x += cuanto
   }
 }
 
@@ -68,11 +55,11 @@ class Persona {
     invokeMethod("_${name}", args)
     _disminuirEnergia(energiaRequerida)
   }
-
+  
   def _caminar(direccion) {
     _mover(10, direccion)
   }
-
+  
   def _trotar(direccion) {
     _mover(20, direccion)
   }
@@ -94,8 +81,12 @@ class Persona {
     energia -= energiaRequerida
   }
   
+  def _mover(cuanto) {
+    posicion.mover(cuanto)
+  }
+  
   def _mover(cuanto, direccion) {
-    posicion.mover(cuanto, direccion)
+    _mover(cuanto."${direccion}"())
   }
   
   def getPosicionX() {
@@ -108,5 +99,12 @@ class Persona {
   
   def volverZombie() {
     this.metaClass { mixin(Zombie) }
+  }
+  
+  static {
+    Number.metaClass {
+      derecha = { delegate}
+      izquierda = { -delegate }
+    }
   }
 }
