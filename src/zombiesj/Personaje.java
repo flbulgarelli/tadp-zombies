@@ -119,7 +119,7 @@ public class Personaje implements Gritable {
     if (!tieneSuficienteEnergia(energiaRequerida)) {
       throw new RuntimeException("No hay suficiente energia para caminar");
     }
-    mover(posicion, 10, direccion);
+    mover(10, direccion);
     disminuirEnergia(energiaRequerida);
   }
 
@@ -128,7 +128,7 @@ public class Personaje implements Gritable {
     if (!tieneSuficienteEnergia(energiaNecesaria)) {
       throw new RuntimeException("No hay suficiente energia para trotar");
     }
-    mover(posicion, 20, direccion);
+    mover(20, direccion);
     disminuirEnergia(energiaNecesaria);
   }
 
@@ -137,7 +137,7 @@ public class Personaje implements Gritable {
     if (!tieneSuficienteEnergia(energiaRequerida)) {
       throw new RuntimeException("No hay suficiente energia para correr");
     }
-    mover(posicion, 40, direccion);
+    mover(40, direccion);
     disminuirEnergia(energiaRequerida);
   }
 
@@ -177,7 +177,7 @@ public class Personaje implements Gritable {
     energia -= energiaRequerida;
   }
 
-  protected void mover(Posicion posicion, int cuanto, Direccion direccion) {
+  protected void mover(int cuanto, Direccion direccion) {
     estado.mover(posicion, cuanto, direccion);
   }
 

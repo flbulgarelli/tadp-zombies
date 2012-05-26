@@ -8,7 +8,7 @@ class Zombie {
     disminuirEnergia(50)
   }
 
-  void mover(posicion, cuanto, direccion) {
+  void mover(cuanto, direccion) {
     posicion.mover(cuanto / 2, direccion)
   }
 
@@ -69,15 +69,15 @@ class Persona {
   }
 
   void _caminar(Direccion direccion) {
-    mover(posicion, 10, direccion)
+    mover(10, direccion)
   }
 
   void _trotar(Direccion direccion) {
-    mover(posicion, 20, direccion)
+    mover(20, direccion)
   }
 
   void _correr(Direccion direccion) {
-    mover(posicion, 40, direccion)
+    mover(40, direccion)
   }
 
   void _gritar() {
@@ -101,8 +101,7 @@ class Persona {
     energia -= energiaRequerida
   }
   
-  //TODO esto tiene un argumento de mas
-  protected mover(posicion, cuanto, direccion) {
+  protected mover(cuanto, direccion) {
     posicion.mover(cuanto, direccion)
   }
   

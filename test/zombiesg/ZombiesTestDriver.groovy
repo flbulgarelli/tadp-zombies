@@ -66,7 +66,6 @@ public class ZombiesTestDriver {
   @Test
   public void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
     zombie1.caminar(Direccion.DERECHA);
-    
     assertEquals(5, zombie1.posicionX);
   }
   

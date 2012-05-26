@@ -118,7 +118,7 @@ public class Personaje implements Gritable {
   public void caminar(final Direccion direccion) {
     new Accion(getEnergiaParaCaminar(), "caminar") {
       protected void realizarAccion() {
-        mover(posicion, 10, direccion);
+        mover(10, direccion);
       }
     }.realizar();
   }
@@ -126,7 +126,7 @@ public class Personaje implements Gritable {
   public void trotar(final Direccion direccion) {
     new Accion(getEnergiaParaCaminar(), "trotar") {
       protected void realizarAccion() {
-        mover(posicion, 20, direccion);
+        mover(20, direccion);
       }
     }.realizar();
   }
@@ -134,7 +134,7 @@ public class Personaje implements Gritable {
   public void correr(final Direccion direccion) {
     new Accion(getEnergiaParaCorrer(), "trotar") {
       protected void realizarAccion() {
-        mover(posicion, 40, direccion);
+        mover(40, direccion);
       }
     }.realizar();
   }
@@ -174,7 +174,7 @@ public class Personaje implements Gritable {
     energia -= energiaRequerida;
   }
 
-  protected void mover(Posicion posicion, int cuanto, Direccion direccion) {
+  protected void mover(int cuanto, Direccion direccion) {
     estado.mover(posicion, cuanto, direccion);
   }
 
