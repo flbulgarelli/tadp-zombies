@@ -17,7 +17,6 @@ class Zombie {
   }
 }
 
-
 enum Direccion {
   IZQUIERDA {
     int mover(x, cuanto) {
@@ -34,11 +33,6 @@ enum Direccion {
 // contra mis principios, es mutable
 class Posicion {
   int x
-
-  Posicion(x) {
-    this.x = x
-  }
-
   void mover(cuanto, direccion) {
     x = direccion.mover(x, cuanto)
   }
@@ -46,78 +40,59 @@ class Posicion {
 
 class Persona {
 
-  Posicion posicion = new Posicion(0)
+  Posicion posicion = new Posicion(x: 0)
   int energia
   def perseguidores = []
 
-  Persona(int energia) {
-    this.energia = energia
-  }
+  int getEnergiaParaCaminar() { 5 }
 
-  int getEnergiaParaCaminar() {
-    5
-  }
+  int getEnergiaParaCorrer() { 60 }
 
-  int getEnergiaParaCorrer() {
-    60
-  }
+  int getEnergiaParaGritar() { 60 }
 
-  int getEnergiaParaGritar() {
-    60
+  int getEnergiaParaTrotar() { 15 }
+  
+  def methodMissing(String name, args){
+    if(name in ['correr', 'gritar', 'caminar', 'trotar']) 
+      realizarAccion(name, args);
+    else 
+      throw new MissingMethodException(name, this.class, arguments);
   }
-
-  int getEnergiaParaTrotar() {
-    15
-  }
-
-  void caminar(Direccion direccion) {
-    int energiaRequerida = energiaParaCaminar
+  
+  def realizarAccion(name, args) {
+    int energiaRequerida = this."energiaPara${name.capitalize()}"
     if (!tieneSuficienteEnergia(energiaRequerida)) {
-      throw new RuntimeException("No hay suficiente energia para caminar")
+      throw new RuntimeException("No hay suficiente energia para ${name}")
     }
+    invokeMethod("_${name}", args)
+    disminuirEnergia(energiaRequerida)
+  }
+
+  void _caminar(Direccion direccion) {
     mover(posicion, 10, direccion)
-    disminuirEnergia(energiaRequerida)
   }
 
-  void trotar(Direccion direccion) {
-    int energiaNecesaria = energiaParaTrotar
-    if (!tieneSuficienteEnergia(energiaNecesaria)) {
-      throw new RuntimeException("No hay suficiente energia para trotar")
-    }
+  void _trotar(Direccion direccion) {
     mover(posicion, 20, direccion)
-    disminuirEnergia(energiaNecesaria)
   }
 
-  void correr(Direccion direccion) {
-    int energiaRequerida = energiaParaCorrer
-    if (!tieneSuficienteEnergia(energiaRequerida)) {
-      throw new RuntimeException("No hay suficiente energia para correr")
-    }
+  void _correr(Direccion direccion) {
     mover(posicion, 40, direccion)
-    disminuirEnergia(energiaRequerida)
   }
 
-  void gritar() {
-    def energiaRequerida = energiaParaTrotar
-    if (!tieneSuficienteEnergia(energiaRequerida)) {
-      throw new RuntimeException("No hay suficiente energia para gritar")
-    }
+  void _gritar() {
     println "AHHHHHH"
-
     perseguidores.each { it.escucharGrito() }
-
-    disminuirEnergia(energiaRequerida)
   }
 
   def perseguirPor(perseguidor) {
-    perseguidores.add(perseguidor)
+    perseguidores << perseguidor
   }
-
+  
   def volverZombie() {
     this.metaClass { mixin(Zombie) }
   }
   
-
   protected tieneSuficienteEnergia(energiaRequerida) {
     energia >= energiaRequerida
   }
@@ -126,10 +101,11 @@ class Persona {
     energia -= energiaRequerida
   }
   
+  //TODO esto tiene un argumento de mas
   protected mover(posicion, cuanto, direccion) {
     posicion.mover(cuanto, direccion)
   }
-
+  
   int getPosicionX() {
     posicion.x
   }

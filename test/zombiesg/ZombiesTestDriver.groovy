@@ -20,10 +20,9 @@ public class ZombiesTestDriver {
 
   @Before
   public void setup() {
-    zombie1 = new Persona(150);
-    
-    personaSana = new Persona(60);
-    personaDebil = new Persona(4);
+    zombie1 = new Persona(energia: 150);
+    personaSana = new Persona(energia: 60);
+    personaDebil = new Persona(energia: 4);
     
     zombie1.volverZombie()
   }
