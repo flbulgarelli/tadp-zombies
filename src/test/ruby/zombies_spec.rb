@@ -1,22 +1,24 @@
 require "rspec"
-require "../../../src/main/ruby/zombies"
+require_relative '../../main/ruby/zombies'
 
 class GritableMock
+  attr_accessor :gritado
   def initialize
     @gritado = false
   end
-  def escucharGrito
+  def escuchar_grito
     @gritado = true
   end
 end
 
 describe "zombies" do
+
   before(:each) do
     @zombie1 = Persona.new(150)
     @persona_sana = Persona.new(60)
     @persona_debil = Persona.new(4)
     @zombie1.volver_zombie
-  end
+    end
 
   describe "direccion" do
     it "tiene metodos izquierda y derecha" do
@@ -37,30 +39,9 @@ describe "zombies" do
       perseguidor1.gritado.should == true
       perseguidor2.gritado.should == true
     end
-  end
 
-  describe "zombie" do
-    it "vuelve zombie a su victima cuando la muerde" do
-      @zombie1.morder(@persona_sana)
-      assertPuedeMorder(@persona_sana, @persona_debil)
-    end
-
-    it "se mueve a la mitad de velocidad de una persona" do
-      @zombie1.caminar_derecha
-      @zombie1.posicion_x.should == 5
-    end
-
-    it "pierde energia si se le grita" do
-      @zombie1.escuchar_grito
-      @zombie1.energia.should == 100
-    end
-
-
-
-  end
-
-  describe "personaje" do
     it "se puede mover en ambas direcciones" do
+      true.should == false
       #Marcar esto
       @persona_sana.instance_eval do
         caminar_derecha
@@ -69,11 +50,33 @@ describe "zombies" do
       end
       @persona_sana.posicion_x.should == 10
     end
+
   end
 
-   def assert_puede_morder(mordedor, mordido)
-      lambda { mordedor.morder(mordido) }.should raise_error
-   end
+  describe "zombie" do
+    it "vuelve zombie a su victima cuando la muerde" do
+      def assert_puede_morder(mordedor, mordido)
+        mordedor.morder(mordido)
+      end
+
+      @zombie1.morder(@persona_sana)
+      assert_puede_morder(@persona_sana, @persona_debil)
+    end
+
+    it "se mueve a la mitad de velocidad de una persona" do
+      true.should == false
+      @zombie1.caminar_derecha
+      @zombie1.posicion_x.should == 5
+    end
+
+    it "pierde energia si se le grita" do
+      true.should == false
+      @zombie1.escuchar_grito
+      @zombie1.energia.should == 100
+    end
+
+  end
+
 end
 
 =begin
