@@ -41,7 +41,6 @@ describe "zombies" do
     end
 
     it "se puede mover en ambas direcciones" do
-      true.should == false
       #Marcar esto
       @persona_sana.instance_eval do
         caminar_derecha
@@ -73,13 +72,11 @@ describe "zombies" do
     end
 
     it "se mueve a la mitad de velocidad de una persona" do
-      true.should == false
       @zombie1.caminar_derecha
       @zombie1.posicion_x.should == 5
     end
 
     it "pierde energia si se le grita" do
-      true.should == false
       @zombie1.escuchar_grito
       @zombie1.energia.should == 100
     end

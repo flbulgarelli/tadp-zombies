@@ -21,7 +21,7 @@ class Persona
         _realizar_accion(name, *args)
       end
       fallback do
-        raise NoMethodError, name
+        raise NoMethodError, "no method #{name.to_s} in #{self.class}"
       end
     end
   end
@@ -64,7 +64,7 @@ class Persona
   end
 
   def _mover_hacia(cuanto, direccion)
-    mover(cuanto.send(direccion))
+    _mover(cuanto.send(direccion))
   end
 
   def posicion_x
