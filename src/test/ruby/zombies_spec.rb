@@ -50,7 +50,16 @@ describe "zombies" do
       end
       @persona_sana.posicion_x.should == 10
     end
+  end
 
+  describe "persona" do
+    it "no puede morder" do
+      lambda { @persona_sana.morder(@persona_debil) }.should raise_error
+    end
+
+    it "es sorda" do
+      lambda { @persona_sana.escuchar_grito }.should raise_error
+    end
   end
 
   describe "zombie" do
@@ -80,10 +89,6 @@ describe "zombies" do
 end
 
 =begin
-@Test(expected = RuntimeException)
-void lasPersonasNoPuedenMorder() {
-  personaSana.morder(personaDebil)
-}
 
 @Test(expected = RuntimeException)
 void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
@@ -105,10 +110,7 @@ void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
   personaDebil.caminarDerecha()
 }
 
-@Test(expected=RuntimeException)
-void lasPersonasSonSordas() {
-  personaSana.escucharGrito()
-}
+
 =end
 
 
