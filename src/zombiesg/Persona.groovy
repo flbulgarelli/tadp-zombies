@@ -2,6 +2,7 @@ package zombiesg
 
 import java.util.Collection
 import java.util.LinkedList
+import Regex
 
 //TODO me faltan reqs para un eigen method y un mixin estatico, y/o multimetodos. 
 //instance eval podremos verlo en la otra clase
@@ -27,8 +28,16 @@ class Posicion {
 }
 
 class Persona {
-
-  Posicion posicion = new Posicion(x: 0)
+  
+  static { 
+    Regex.require()
+    Number.metaClass {
+      derecha = { delegate}
+      izquierda = { -delegate }
+    }
+  }
+ 
+  def posicion = new Posicion(x: 0)
   def energia
   def perseguidores = []
 
@@ -40,11 +49,18 @@ class Persona {
 
   def getEnergiaParaTrotar() { 15 }
   
-  def methodMissing(String name, args){
-    if(name in ['correr', 'gritar', 'caminar', 'trotar']) 
-      _realizarAccion(name, args);
-    else 
-      throw new MissingMethodException(name, this.class, args);
+  def methodMissing(String name, args) {
+    name.match {
+      when(/(.*)(Izquierda|Derecha)/) {
+        accion, sentido -> _realizarAccion(accion, sentido.toLowerCase())
+      }
+      when(/correr|gritar|caminar|trotar/) {
+        _realizarAccion(name, args)
+      }
+      fallback {
+        throw new MissingMethodException(name, this.class, args)
+      }
+    }
   }
   
   def _realizarAccion(name, args) {
@@ -101,10 +117,4 @@ class Persona {
     this.metaClass { mixin(Zombie) }
   }
   
-  static {
-    Number.metaClass {
-      derecha = { delegate}
-      izquierda = { -delegate }
-    }
-  }
 }
