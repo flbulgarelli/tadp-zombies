@@ -59,6 +59,20 @@ describe "zombies" do
     it "es sorda" do
       lambda { @persona_sana.escuchar_grito }.should raise_error
     end
+
+    it "no puede correr sin suficiente energia" do
+      lambda { @persona_debil.correr_derecha }.should raise_error
+    end
+
+    it "no puede gritar sin suficiente energia" do
+      lambda { @persona_debil.gritar }.should raise_error
+    end
+
+    it "no puede trotar sin suficiente energia" do
+      lambda { @persona_debil.trotar }.should raise_error
+    end
+
+
   end
 
   describe "zombie" do
@@ -85,30 +99,8 @@ describe "zombies" do
 
 end
 
-=begin
-
-@Test(expected = RuntimeException)
-void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
-  personaDebil.correrDerecha()
-}
-
-@Test(expected = RuntimeException)
-void lasPersonasNoPuedeGritarSiNoTienenEnergiaSuficiente() {
-  personaDebil.gritar()
-}
-
-@Test(expected = RuntimeException)
-void lasPersonasNoPuedenTrotarSiNoTienenEnergiaSuficiente() {
-  personaDebil.trotarDerecha()
-}
-
-@Test(expected = RuntimeException)
-void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
-  personaDebil.caminarDerecha()
-}
 
 
-=end
 
 
 
