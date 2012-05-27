@@ -4,6 +4,8 @@ import static org.junit.Assert.*
 
 import org.junit.Test
 import org.junit.rules.ExpectedException;
+
+import regex.Regex;
 public class RegexTest {
 
   static { Regex.require() }  

@@ -1,8 +1,7 @@
 package zombiesg
-
+import regex.*
 import java.util.Collection
 import java.util.LinkedList
-import Regex
 
 //TODO me faltan reqs para un eigen method y un mixin estatico, y/o multimetodos. 
 //instance eval podremos verlo en la otra clase
