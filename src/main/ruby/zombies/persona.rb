@@ -1,4 +1,5 @@
 class Persona
+  attr_reader :energia
 
   def initialize(energia)
     @perseguidores = []
@@ -6,25 +7,27 @@ class Persona
     @energia = energia
   end
 
-  def energia_para
-    {:caminar => 5,
-     :correr => 60,
-     :gritar => 60,
-     :trotar => 15}
-  end
+  def energia_para_caminar;  5 end
+  def energia_para_correr;  60 end
+  def energia_para_gritar;  60 end
+  def energia_para_trotar;  15 end
 
   def method_missing(name, *args)
-    if [:correr, :gritar, :caminar, :trotar].include?  name
-      _realizar_accion(name, *args)
-    elsif name.to_s.start_with?('energia_para')
-      energia_para[name.to_s.delete('energia_para')]
-    else
-      raise NoMethodError, name
+    name.to_s.matches do
+      on /(.*)_(izquierda|derecha)/ do |accion,direccion|
+        _realizar_accion(accion, *([direccion] + args))
+      end
+      on /correr|gritar|caminar|trotar/ do
+        _realizar_accion(name, *args)
+      end
+      fallback do
+        raise NoMethodError, name
+      end
     end
   end
 
   def _realizar_accion(name, *args)
-    energia_requerida = energia_para[name]
+    energia_requerida = send "energia_para_#{name}"
     raise "No hay suficiente energi para #{name}" unless
         _tiene_suficiente_energia(energia_requerida)
     send "_#{name}", *args
