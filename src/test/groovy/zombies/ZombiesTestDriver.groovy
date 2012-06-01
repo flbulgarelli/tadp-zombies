@@ -31,7 +31,7 @@ class ZombiesTestDriver {
   
   
   @Test
-  void cuandoUnPersonajeGritaSusPerseguidoresLoEscuchan() {
+  void 'cuando un personaje grita sus perseguidores lo escuchan'() {
     GritableMock perseguidor1 = new GritableMock()
     GritableMock perseguidor2 = new GritableMock()
     personaSana.with { 
@@ -46,7 +46,7 @@ class ZombiesTestDriver {
 
 
   @Test
-  void cuandoUnZombieMuerdeVuelveASuVictimaZombie() {
+  void 'cuando un zombie muerde vuelve a su victima zombie'() {
     zombie1.morder(personaSana)
     assertPuedeMorder(personaSana, personaDebil)
   }
@@ -57,7 +57,7 @@ class ZombiesTestDriver {
   }
   
   @Test
-  void losPersonajesSePuedenMoverEnAmbasDirecciones() {
+  void 'los personajes se pueden mover en ambas direcciones'() {
     //Marcar esto
     personaSana.with {
       caminarDerecha()
@@ -68,40 +68,40 @@ class ZombiesTestDriver {
   }
   
   @Test
-  void losZombiesSeMuevenALaMitadDeVelocidadQueLasPersonas() {
+  void 'los zombies se mueven a la mitad de velocidad que las personas'() {
     zombie1.caminarDerecha()
     assert 5 == zombie1.posicionX
   }
   
   @Test(expected = RuntimeException)
-  void lasPersonasNoPuedeCorrerSiNoTienenEnergiaSuficiente() {
+  void 'las personas no puede correr si no tienen energia suficiente'() {
     personaDebil.correrDerecha()
   }
   
   @Test(expected = RuntimeException)
-  void lasPersonasNoPuedeGritarSiNoTienenEnergiaSuficiente() {
+  void 'las personas no pueden gritar si no tienen energia suficiente'() {
     personaDebil.gritar()
   }
   
   @Test(expected = RuntimeException)
-  void lasPersonasNoPuedenTrotarSiNoTienenEnergiaSuficiente() {
+  void 'las personas no pueden trotar si no tienen energia suficiente'() {
     personaDebil.trotarDerecha()
   }
   
   @Test(expected = RuntimeException)
-  void lasPersonasNoPuedenCaminarSiNoTienenEnergiaSuficiente() {
+  void 'las personas no pueden caminar si no tienen energia suficiente'() {
     personaDebil.caminarDerecha()
   }
 
   @Test
-  void gritarleAUnZombieReduceSuEnergia() {
+  void 'gritarle a un zombie reduce su energia'() {
     zombie1.escucharGrito()
     
     assert 100 == zombie1.energia
   }
   
   @Test(expected=RuntimeException)
-  void lasPersonasSonSordas() {
+  void 'las personas son sordas'() {
     personaSana.escucharGrito()
   }
 
