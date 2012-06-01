@@ -1,4 +1,4 @@
-package zombiesg;
+package regex;
 
 import static org.junit.Assert.*
 

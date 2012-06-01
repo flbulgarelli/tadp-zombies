@@ -1,39 +1,11 @@
-package zombiesg
+package zombies
 import regex.*
-import java.util.Collection
-import java.util.LinkedList
-
-//TODO me faltan reqs para un eigen method y un mixin estatico, y/o multimetodos. 
-//instance eval podremos verlo en la otra clase
-class Zombie {
-  def escucharGrito() {
-    _disminuirEnergia(50)
-  }
-
-  def _mover(cuanto) {
-    posicion.mover(cuanto / 2)
-  }
-
-  def morder(otro) {
-    otro.volverZombie()
-  }
-}
-
-class Posicion {
-  def x
-  def mover(cuanto) {
-    x += cuanto
-  }
-}
 
 class Persona {
   
   static { 
     Regex.require()
-    Number.metaClass {
-      derecha = { delegate}
-      izquierda = { -delegate }
-    }
+    Direccion.require()
   }
  
   def posicion = new Posicion(x: 0)
@@ -113,7 +85,9 @@ class Persona {
   }
   
   def volverZombie() {
-    this.metaClass { mixin(Zombie) }
+    this.metaClass {
+      mixin(Zombie) 
+    }
   }
   
 }

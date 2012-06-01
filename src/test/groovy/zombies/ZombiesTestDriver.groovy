@@ -1,9 +1,11 @@
-package zombiesg
+package zombies
 
 import static org.junit.Assert.*
 
 import org.junit.Before
 import org.junit.Test
+
+import zombies.Persona;
 
 class ZombiesTestDriver {
   
