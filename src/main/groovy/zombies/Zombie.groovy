@@ -6,7 +6,7 @@ class Zombie {
   }
 
   def _mover(cuanto) {
-    posicion.mover(cuanto / 2)
+    setPosicionX(posicionX + cuanto / 2)
   }
 
   def morder(otro) {

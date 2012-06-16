@@ -8,17 +8,14 @@ class Persona {
     Direccion.require()
   }
  
-  def posicion = new Posicion(x: 0)
+  def posicionX = 0
   def energia
   def perseguidores = []
 
-  def getEnergiaParaCaminar() { 5 }
-
-  def getEnergiaParaCorrer() { 60 }
-
-  def getEnergiaParaGritar() { 60 }
-
-  def getEnergiaParaTrotar() { 15 }
+  def energiaParaCaminar = 5
+  def energiaParaCorrer  = 60 
+  def energiaParaGritar  = 60 
+  def energiaParaTrotar  = 15 
   
   def methodMissing(String name, args) {
     name.match {
@@ -69,15 +66,11 @@ class Persona {
   }
   
   def _mover(cuanto) {
-    posicion.mover(cuanto)
+    posicionX += cuanto
   }
   
   def _mover(cuanto, direccion) {
     _mover(cuanto."${direccion}"())
-  }
-  
-  def getPosicionX() {
-    posicion.x
   }
   
   def perseguirPor(perseguidor) {
@@ -89,5 +82,6 @@ class Persona {
       mixin(Zombie) 
     }
   }
+  
   
 }
