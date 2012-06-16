@@ -64,7 +64,6 @@ enum Direccion {
   public abstract int mover(int x, int cuanto);
 }
 
-// contra mis principios, es mutable
 class Posicion {
   private int x;
 
@@ -86,6 +85,7 @@ interface Gritable {
   void escucharGrito();
   
 }
+
 
 public class Personaje implements Gritable {
 
@@ -114,43 +114,39 @@ public class Personaje implements Gritable {
     return 15;
   }
 
-  public void caminar(Direccion direccion) {
-    int energiaRequerida = getEnergiaParaCaminar();
-    if (!tieneSuficienteEnergia(energiaRequerida)) {
-      throw new RuntimeException("No hay suficiente energia para caminar");
-    }
-    mover(10, direccion);
-    disminuirEnergia(energiaRequerida);
+  public void caminar(final Direccion direccion) {
+    new Accion(getEnergiaParaCaminar(), "caminar") {
+      protected void realizarAccion() {
+        mover(10, direccion);
+      }
+    }.realizar();
   }
 
-  public void trotar(Direccion direccion) {
-    int energiaNecesaria = getEnergiaParaTrotar();
-    if (!tieneSuficienteEnergia(energiaNecesaria)) {
-      throw new RuntimeException("No hay suficiente energia para trotar");
-    }
-    mover(20, direccion);
-    disminuirEnergia(energiaNecesaria);
+  public void trotar(final Direccion direccion) {
+    new Accion(getEnergiaParaCaminar(), "trotar") {
+      protected void realizarAccion() {
+        mover(20, direccion);
+      }
+    }.realizar();
   }
 
-  public void correr(Direccion direccion) {
-    int energiaRequerida = getEnergiaParaCorrer();
-    if (!tieneSuficienteEnergia(energiaRequerida)) {
-      throw new RuntimeException("No hay suficiente energia para correr");
-    }
-    mover(40, direccion);
-    disminuirEnergia(energiaRequerida);
+  public void correr(final Direccion direccion) {
+    new Accion(getEnergiaParaCorrer(), "trotar") {
+      protected void realizarAccion() {
+        mover(40, direccion);
+      }
+    }.realizar();
   }
 
   public void gritar() {
-    if (!tieneSuficienteEnergia(getEnergiaParaGritar())) {
-      throw new RuntimeException("No hay suficiente energia para gritar");
-    }
-    System.out.println("AHHHHHH");
+    new Accion(getEnergiaParaGritar(), "gritar") {
+      protected void realizarAccion() {
+        System.out.println("AHHHHHH");
 
-    for (Gritable perseguidor : perseguidores)
-      perseguidor.escucharGrito();
-
-    disminuirEnergia(getEnergiaParaGritar());
+        for (Gritable perseguidor : perseguidores)
+          perseguidor.escucharGrito();
+      }
+    }.realizar();
   }
 
   public void perseguirPor(Gritable perseguidor) {
@@ -187,6 +183,26 @@ public class Personaje implements Gritable {
 
   public int getEnergia() {
     return energia;
+  }
+  
+  abstract class Accion {
+    
+    private final int energiaRequerida;
+    private final String nombreAccion;
+
+    public Accion(int energiaRequerida, String nombreAccion) {
+      this.energiaRequerida = energiaRequerida;
+      this.nombreAccion = nombreAccion;
+    }
+
+    public void realizar() {
+      if (!tieneSuficienteEnergia(energiaRequerida)) {
+        throw new RuntimeException("No hay suficiente energia para " + nombreAccion);
+      }
+      realizarAccion();
+      disminuirEnergia(energiaRequerida);
+    }
+    protected abstract void realizarAccion();
   }
 
 }

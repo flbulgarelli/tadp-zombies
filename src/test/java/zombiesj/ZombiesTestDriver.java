@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import zombiesj.Direccion;
+import zombiesj.Gritable;
+import zombiesj.Personaje;
+
 public class ZombiesTestDriver {
 
   private Personaje zombie1;
